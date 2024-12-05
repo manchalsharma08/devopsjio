@@ -1,7 +1,7 @@
 trigger:
 - main
 
-pool: mee
+pool: default
 
 stages:
 - stage: initAndPlanStage
@@ -18,9 +18,9 @@ stages:
          provider: 'azurerm'
          command: 'init'
          backendServiceArm: 'ACR-K8S-SC'
-         backendAzureRmResourceGroupName: 'rg'
-         backendAzureRmStorageAccountName: 'storage'
-         backendAzureRmContainerName: 'con'
+         backendAzureRmResourceGroupName: 'devops-rg'
+         backendAzureRmStorageAccountName: 'devopsstorage98765487879'
+         backendAzureRmContainerName: 'devops-con'
          backendAzureRmKey: 'vineet.terraform.tfstate'
      - task: TerraformTaskV4@4
        inputs:
