@@ -7,6 +7,13 @@ steps:
  - task: TerraformInstaller@1
    inputs:
      terraformVersion: 'latest'
+ - task: TerraformTaskV4@4
+   inputs:
+     provider: 'azurerm'
+     command: 'custom'
+     workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\Dev'
+     outputTo: 'console'
+     environmentServiceNameAzureRM: 'jio-it-Service-connection'
 
  - script: |
      terraform init
