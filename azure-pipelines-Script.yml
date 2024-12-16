@@ -1,0 +1,17 @@
+trigger:
+- main
+
+pool: default
+
+steps:
+ - task: TerraformInstaller@1
+   inputs:
+     terraformVersion: 'latest'
+
+ - script: |
+     terraform init
+     terraform validation 
+     terraform fmt
+     terraform plan 
+     terraform apply -auto-approve
+   displayName: "run terraform Command"
