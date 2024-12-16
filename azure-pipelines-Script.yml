@@ -12,6 +12,7 @@ steps:
      provider: 'azurerm'
      command: 'custom'
      workingDirectory: '$(System.DefaultWorkingDirectory)\Environment\Dev'
+     commandOptions: 'terraform fmt'
      outputTo: 'console'
      environmentServiceNameAzureRM: 'jio-it-Service-connection'
 
