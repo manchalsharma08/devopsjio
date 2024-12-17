@@ -1,0 +1,57 @@
+trigger:
+- main
+
+pool: default
+
+stages:
+- stage: initAndPlanStage
+  displayName: "Stage for init And Plan work"
+  jobs:
+  - job: initAndPlanJob
+    displayName: "Job for init And Plan work"
+    steps:
+     - task: TerraformInstaller@1
+       inputs:
+         terraformVersion: 'latest'
+     - task: TerraformTaskV4@4
+       inputs:
+         provider: 'azurerm'
+         command: 'init'
+         backendServiceArm: 'ACR-K8S-SC'
+         backendAzureRmResourceGroupName: 'devops-rg'
+         backendAzureRmStorageAccountName: 'devopsstorage98765487879'
+         backendAzureRmContainerName: 'devops-con'
+         backendAzureRmKey: 'vineet.terraform.tfstate'
+     - task: TerraformTaskV4@4
+       inputs:
+         provider: 'azurerm'
+         command: 'plan'
+         environmentServiceNameAzureRM: 'ACR-K8S-SC'
+
+- stage: muanualvalidationStage
+  displayName: " Stage for manual validation"
+  jobs:
+  - job: manualValidationJob
+    displayName: "Job for manual validation work"
+    pool: server
+    steps:
+     - task: ManualValidation@1
+       inputs:
+         notifyUsers: '@vineet'
+         approvers: '@vineet'
+         instructions: 'need to approve'
+
+- stage: applyStage
+  displayName: "Stage for apply work"
+  jobs:
+  - job: ApplyJob
+    displayName: "Job for terraform Apply work"
+    steps:
+     - task: TerraformTaskV4@4
+       inputs:
+         provider: 'azurerm'
+         command: 'apply'
+         commandOptions: '-auto-approve'
+         environmentServiceNameAzureRM: 'ACR-K8S-SC'
+
+     
