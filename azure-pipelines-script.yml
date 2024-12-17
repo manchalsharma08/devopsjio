@@ -1,6 +1,12 @@
 trigger:
 - main
 
+variables:
+  ACR_NAME: 'acrado1111'                # Azure Container Registry name
+  IMAGE_NAME: 'nginx'             # Docker image name
+  IMAGE_TAG: 'latest'                  # Docker image tag
+  AZURE_SUBSCRIPTION: 'ACR-K8S-SC-Devopsjio'  # Azure Service Connection name
+
 pool: default
 
 
@@ -23,9 +29,41 @@ stages:
          terraform validate
 
          terraform plan
+    
+- stage: ImageAcrFactchstage
+  displayName: Image Fatch to ACR stage
+  jobs:
+  - job: ImageACRFatchJob
+    displayName: Image Fatchto ACR Job
+    steps:
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'ACR-K8S-SC-Devopsjio'
+        scriptType: 'ps'
+        scriptLocation: 'inlineScript'             # Step 1: Azure CLI Login
+        inlineScript: |
+          echo "Logging into Azure..."
+          az account show
+        powerShellErrorActionPreference: 'continue'
 
+     # Step 2: Login to Azure Container Registry
 
+    - script: |                                   
+        echo "Logging into ACR: $(ACR_NAME)"
+        az acr login --name $(ACR_NAME)
 
+    # Step 3: Fetch the Docker Image
+
+    - script: |
+        echo "Pulling image: $(IMAGE_NAME):$(IMAGE_TAG)"
+        docker pull $(ACR_NAME).azurecr.io/$(IMAGE_NAME):$(IMAGE_TAG)
+        displayName: "Fetch Docker Image from ACR"
+
+    # Step 4: Verify the Image
+    - script: |
+        echo "Verifying pulled images..."
+        docker images | grep $(IMAGE_NAME)
+        displayName: "Verify Docker Image"
 
 # stages:
 # - stage: initAndPlanStage
