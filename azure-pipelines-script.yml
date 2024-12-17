@@ -4,9 +4,25 @@ trigger:
 pool: default
 
 
+stages:
+- stage: BuildPipelineStage
+  displayName: Build Stage
+  jobs:
+  - job: BuildPipelineJob
+    displayName: Build job
+    steps:
+     - task: TerraformInstaller@1
+       inputs:
+         terraformVersion: 'latest'
+  
 
+     - script: |
+         cd Environment\Dev
+         terraform init
+         terraform fmt
+         terraform validate
 
-
+         terraform plan
 
 
 
