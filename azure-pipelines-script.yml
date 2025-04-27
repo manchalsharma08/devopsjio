@@ -2,10 +2,10 @@ trigger:
 - main
 
 variables:
-  ACR_NAME: 'acrado1111'                # Azure Container Registry name
-  IMAGE_NAME: 'nginx'             # Docker image name
-  IMAGE_TAG: 'latest'                  # Docker image tag
-  AZURE_SUBSCRIPTION: 'ACR-K8S-SC-Devopsjio'  # Azure Service Connection name
+  ACR_NAME: 'myacr0216'                # Azure Container Registry name
+  IMAGE_NAME: 'my-html-calculator'             # Docker image name
+  IMAGE_TAG: 'v2'                  # Docker image tag
+  AZURE_SUBSCRIPTION: 'humAzure'  # Azure Service Connection name
 
 pool: default
 
